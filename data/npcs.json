@@ -6,7 +6,11 @@
     "max_hp": 18,
     "attack": 0,
     "exp_reward": 0,
-    "hostile": false
+    "hostile": false,
+    "dialogue": [
+      "기록은 늘 사람보다 오래 남습니다.",
+      "봉인 제단으로 갈 생각이라면, 먼저 네 마음이 흔들리는 소리를 들어보세요."
+    ]
   },
   "restless_shadow": {
     "name": "흔들리는 그림자",
@@ -15,6 +19,7 @@
     "max_hp": 12,
     "attack": 3,
     "exp_reward": 5,
-    "hostile": true
+    "hostile": true,
+    "dialogue": []
   }
 }

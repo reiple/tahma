@@ -16,6 +16,8 @@ HELP_TEXT = """사용 가능한 명령어
   소지품, inventory      가진 물건을 봅니다.
   줍기 <물건>            장소의 물건을 줍습니다.
   버리기 <물건>          가진 물건을 내려놓습니다.
+  살피기 <대상>, examine  물건이나 존재를 자세히 봅니다.
+  대화 <대상>, talk       같은 장소의 존재에게 말을 겁니다.
   상태, status           체력과 경험치를 확인합니다.
   휴식, rest             잠시 쉬며 체력을 회복합니다.
   공격 <대상>, attack    같은 장소의 적을 공격합니다.
@@ -65,6 +67,12 @@ def execute_command(raw_command: str, player: Player, world: World) -> CommandRe
     if verb_lower in {"버리기", "drop"}:
         return CommandResult(_drop_item(rest.strip(), player, world))
 
+    if verb_lower in {"살피기", "조사", "examine", "inspect", "x"}:
+        return CommandResult(_examine(rest.strip(), player, world))
+
+    if verb_lower in {"대화", "말걸기", "talk"}:
+        return CommandResult(_talk(rest.strip(), player, world))
+
     if verb_lower in {"상태", "status", "stat"}:
         return CommandResult(f"체력: {player.hp}/{player.max_hp}\r\n공격력: {player.attack}\r\n경험치: {player.exp}")
 
@@ -98,7 +106,7 @@ def _find_item_id(query: str, candidates: list[str], world: World) -> str | None
     lowered = query.lower()
     for item_id in candidates:
         item = world.items.get(item_id)
-        if item and (lowered == item_id.lower() or lowered == item.name.lower()):
+        if item and (lowered == item_id.lower() or lowered == item.name.lower() or lowered in item.name.lower()):
             return item_id
     return None
 
@@ -131,6 +139,36 @@ def _find_npc_id(query: str, candidates: list[str], world: World) -> str | None:
         if npc and (lowered == npc_id.lower() or lowered == npc.name.lower() or lowered in npc.name.lower()):
             return npc_id
     return None
+
+
+def _examine(query: str, player: Player, world: World) -> str:
+    room = world.rooms[player.room_id]
+    item_id = _find_item_id(query, [*room.items, *player.inventory], world)
+    if item_id is not None:
+        item = world.items[item_id]
+        return f"{item.name}\r\n{item.description}"
+
+    npc_id = _find_npc_id(query, room.npcs, world)
+    if npc_id is not None:
+        npc = world.npcs[npc_id]
+        mood = "적대적입니다." if npc.hostile else "적대적으로 보이지는 않습니다."
+        return f"{npc.name}\r\n{npc.description}\r\n체력: {npc.hp}/{npc.max_hp}\r\n{mood}"
+
+    return "자세히 살펴볼 대상을 찾지 못했습니다."
+
+
+def _talk(query: str, player: Player, world: World) -> str:
+    room = world.rooms[player.room_id]
+    npc_id = _find_npc_id(query, room.npcs, world)
+    if npc_id is None:
+        return "말을 걸 대상이 없습니다."
+
+    npc = world.npcs[npc_id]
+    if npc.hostile:
+        return f"{npc.name}은(는) 대답 대신 위협적으로 흔들립니다."
+    if not npc.dialogue:
+        return f"{npc.name}은(는) 조용히 고개를 끄덕입니다."
+    return "\r\n".join(f"{npc.name}: {line}" for line in npc.dialogue)
 
 
 def _attack_npc(query: str, player: Player, world: World) -> str:
