@@ -50,7 +50,7 @@ async def main() -> None:
         async with server:
             reader, writer = await asyncio.open_connection(config.host, port)
             output = await read_available(reader)
-            for command in ["전투테스트", "전투테스트", "북", "북", "보기", "공격 그림자", "공격 그림자", "상태", "종료"]:
+            for command in ["전투테스트", "전투테스트", "광장", "봉인제단", "보기", "공격 그림자", "공격 그림자", "상태", "종료"]:
                 await send_line(writer, command)
                 output += await read_available(reader)
             writer.close()

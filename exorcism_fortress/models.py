@@ -43,3 +43,4 @@ class Player:
     attack: int = 6
     exp: int = 0
     inventory: list[str] = field(default_factory=list)
+    equipment: list[str] = field(default_factory=list)

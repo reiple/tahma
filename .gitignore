@@ -12,3 +12,4 @@ wheels/
 # Runtime state
 logs/
 saves/
+work/

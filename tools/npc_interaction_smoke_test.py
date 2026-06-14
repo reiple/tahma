@@ -50,13 +50,13 @@ async def main() -> None:
         async with server:
             reader, writer = await asyncio.open_connection(config.host, port)
             output = await read_available(reader)
-            for command in ["상호작용", "상호작용", "북", "서", "살피기 사서", "대화 사서", "종료"]:
+            for command in ["상호작용", "상호작용", "광장", "서", "서", "살피기 연희", "대화 연희", "종료"]:
                 await send_line(writer, command)
                 output += await read_available(reader)
             writer.close()
             await writer.wait_closed()
 
-    expected = ["장서각", "침묵한 사서", "기록은 늘 사람보다 오래 남습니다", "적대적으로 보이지는 않습니다"]
+    expected = ["공공건물1층", "연희", "입장티켓을 받아", "적대적으로 보이지는 않습니다"]
     missing = [text for text in expected if text not in output]
     if missing:
         raise AssertionError(f"missing expected text: {missing}\n{output}")

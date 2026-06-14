@@ -6,5 +6,13 @@
   "brass_key": {
     "name": "놋쇠 열쇠",
     "description": "작은 문을 열 수 있을 것 같은 묵직한 열쇠다."
+  },
+  "entrance_ticket": {
+    "name": "입장티켓",
+    "description": "초보 수련장에 들어갈 때 필요하다고 안내받은 티켓이다."
+  },
+  "ecto_staff": {
+    "name": "축복받은 엑토스탭",
+    "description": "으스스한 영기가 흐르는 초보 퇴마사의 무기다."
   }
 }
