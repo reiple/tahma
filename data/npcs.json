@@ -1,0 +1,20 @@
+{
+  "silent_librarian": {
+    "name": "침묵한 사서",
+    "description": "말없이 장서각을 지키는 사서다. 낯선 방문자를 조용히 살핀다.",
+    "hp": 18,
+    "max_hp": 18,
+    "attack": 0,
+    "exp_reward": 0,
+    "hostile": false
+  },
+  "restless_shadow": {
+    "name": "흔들리는 그림자",
+    "description": "봉인 제단 주변을 맴도는 낮은 원념이다.",
+    "hp": 12,
+    "max_hp": 12,
+    "attack": 3,
+    "exp_reward": 5,
+    "hostile": true
+  }
+}

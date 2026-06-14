@@ -30,6 +30,7 @@ For normal server changes, run:
 ```powershell
 uv run python -m compileall exorcism_fortress
 uv run python tools\smoke_test.py
+uv run python tools\combat_smoke_test.py
 ```
 
 Add more tests when the changed behavior is larger than the current smoke test covers.

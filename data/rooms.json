@@ -36,7 +36,7 @@
       "동": "courtyard"
     },
     "items": [],
-    "npcs": ["침묵한 사서"]
+    "npcs": ["silent_librarian"]
   },
   "shrine": {
     "name": "봉인 제단",
@@ -45,6 +45,6 @@
       "남": "courtyard"
     },
     "items": [],
-    "npcs": []
+    "npcs": ["restless_shadow"]
   }
 }
