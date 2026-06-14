@@ -25,7 +25,7 @@
 9. Pull Request를 작성할 때 Copilot 리뷰를 요청합니다.
 10. Copilot 리뷰가 완료되면 지적 사항을 검토합니다.
 11. 필요한 수정 사항을 같은 PR 브랜치에 반영합니다.
-12. Pull Request를 코드 리뷰합니다.
+12. Pull Request에 대한 코드 리뷰를 요청하고 리뷰 결과를 확인합니다.
 13. 리뷰가 끝난 뒤에만 `main`에 병합합니다.
 14. `main`으로 돌아와 워킹트리가 깨끗한지 확인합니다.
 
@@ -34,7 +34,7 @@
 일반적인 서버 변경에서는 다음 명령을 실행합니다.
 
 ```powershell
-uv run python -m compileall exorcism_fortress
+uv run python -m compileall exorcism_fortress tools
 uv run python tools\smoke_test.py
 uv run python tools\combat_smoke_test.py
 uv run python tools\npc_interaction_smoke_test.py
