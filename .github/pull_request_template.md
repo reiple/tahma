@@ -1,11 +1,11 @@
-## Summary
+## 요약
 
 - 
 
-## Verification
+## 검증
 
 - 
 
-## Notes
+## 참고
 
 - 
