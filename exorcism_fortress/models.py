@@ -20,6 +20,7 @@ class Npc:
     attack: int
     exp_reward: int = 0
     hostile: bool = False
+    dialogue: list[str] = field(default_factory=list)
 
 
 @dataclass
