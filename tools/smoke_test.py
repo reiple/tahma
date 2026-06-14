@@ -2,6 +2,7 @@
 
 import asyncio
 import sys
+from tempfile import TemporaryDirectory
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
@@ -33,33 +34,34 @@ async def send_line(writer: asyncio.StreamWriter, text: str) -> None:
 
 
 async def main() -> None:
-    config = ServerConfig(
-        host="127.0.0.1",
-        port=0,
-        encoding="utf-8",
-        command_cooldown_seconds=0.1,
-        data_dir=Path("data"),
-        save_dir=Path("saves"),
-    )
-    mud = MudServer(config)
-    server = await asyncio.start_server(mud.handle_client, config.host, config.port)
-    port = server.sockets[0].getsockname()[1]
+    with TemporaryDirectory() as save_dir:
+        config = ServerConfig(
+            host="127.0.0.1",
+            port=0,
+            encoding="utf-8",
+            command_cooldown_seconds=0.1,
+            data_dir=Path("data"),
+            save_dir=Path(save_dir),
+        )
+        mud = MudServer(config)
+        server = await asyncio.start_server(mud.handle_client, config.host, config.port)
+        port = server.sockets[0].getsockname()[1]
 
-    async with server:
-        reader, writer = await asyncio.open_connection(config.host, port)
-        output = await read_available(reader)
-        await send_line(writer, "심리학과")
-        output += await read_available(reader)
-        await send_line(writer, "심리학과")
-        output += await read_available(reader)
-        await send_line(writer, "보기")
-        output += await read_available(reader)
-        await send_line(writer, "북")
-        output += await read_available(reader)
-        await send_line(writer, "종료")
-        output += await read_available(reader)
-        writer.close()
-        await writer.wait_closed()
+        async with server:
+            reader, writer = await asyncio.open_connection(config.host, port)
+            output = await read_available(reader)
+            await send_line(writer, "심리학과")
+            output += await read_available(reader)
+            await send_line(writer, "심리학과")
+            output += await read_available(reader)
+            await send_line(writer, "보기")
+            output += await read_available(reader)
+            await send_line(writer, "북")
+            output += await read_available(reader)
+            await send_line(writer, "종료")
+            output += await read_available(reader)
+            writer.close()
+            await writer.wait_closed()
 
     expected = ["퇴마요새", "요새 정문", "중앙 마당"]
     missing = [text for text in expected if text not in output]

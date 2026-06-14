@@ -1,0 +1,5 @@
+# Example only. Copy this content to a local command file before running.
+도움말
+보기
+소지품
+종료
