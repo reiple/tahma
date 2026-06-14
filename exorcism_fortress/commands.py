@@ -13,6 +13,7 @@ DIRECTIONS = {
 HELP_TEXT = """사용 가능한 명령어
   보기, 주변, look       현재 장소를 살핍니다.
   북/남/동/서            해당 방향으로 이동합니다.
+  장소명                 갈 수 있는 장소로 이동합니다.
   소지품, inventory      가진 물건을 봅니다.
   줍기 <물건>            장소의 물건을 줍습니다.
   버리기 <물건>          가진 물건을 내려놓습니다.
@@ -21,6 +22,8 @@ HELP_TEXT = """사용 가능한 명령어
   상태, status           체력과 경험치를 확인합니다.
   휴식, rest             잠시 쉬며 체력을 회복합니다.
   공격 <대상>, attack    같은 장소의 적을 공격합니다.
+  입장티켓               연희에게 초보 입장티켓을 요청합니다.
+  모두 무장              가진 장비를 한 번에 착용합니다.
   말 <내용>              같은 서버의 접속자에게 말합니다.
   인코딩 <utf-8|cp949|euc-kr>  현재 접속의 출력 인코딩을 바꿉니다.
   종료, quit             저장 후 접속을 끝냅니다."""
@@ -55,6 +58,11 @@ def execute_command(raw_command: str, player: Player, world: World) -> CommandRe
         player.room_id = room.exits[direction]
         return CommandResult(world.describe_room(player.room_id))
 
+    room = world.rooms[player.room_id]
+    if verb in room.exits:
+        player.room_id = room.exits[verb]
+        return CommandResult(world.describe_room(player.room_id))
+
     if verb_lower in {"소지품", "인벤토리", "inventory", "inv", "i"}:
         if not player.inventory:
             return CommandResult("가진 물건이 없습니다.")
@@ -66,6 +74,12 @@ def execute_command(raw_command: str, player: Player, world: World) -> CommandRe
 
     if verb_lower in {"버리기", "drop"}:
         return CommandResult(_drop_item(rest.strip(), player, world))
+
+    if command == "입장티켓":
+        return CommandResult(_request_entrance_ticket(player, world))
+
+    if command == "모두 무장":
+        return CommandResult(_equip_all(player))
 
     if verb_lower in {"살피기", "조사", "examine", "inspect", "x"}:
         return CommandResult(_examine(rest.strip(), player, world))
@@ -128,6 +142,32 @@ def _drop_item(query: str, player: Player, world: World) -> str:
     player.inventory.remove(item_id)
     world.rooms[player.room_id].items.append(item_id)
     return f"{world.items[item_id].name}을(를) 내려놓았습니다."
+
+
+def _request_entrance_ticket(player: Player, world: World) -> str:
+    room = world.rooms[player.room_id]
+    if "yeonhui" not in room.npcs:
+        return "여기서는 입장티켓을 받을 수 없습니다."
+    if "entrance_ticket" in player.inventory:
+        return "연희 : 왜 티켓을 달라고 하는거죠? 좀 곤란하군요."
+    player.inventory.append("entrance_ticket")
+    return "연희 : 흠. 아직 레벨이 낮으셔서 수련이 필요하시겠네요.\r\n       이걸 받으세요....."
+
+
+def _equip_all(player: Player) -> str:
+    if "ecto_staff" not in player.inventory:
+        player.inventory.append("ecto_staff")
+    if "ecto_staff" not in player.equipment:
+        player.equipment.append("ecto_staff")
+    return "\r\n".join(
+        [
+            "당신은 축복받은 엑토스탭을 무장했습니다.",
+            "당신은 허리에 차고 있던 엑토스탭을 손에 쥡니다.",
+            "엑토스탭에서 으스스한 영기가 흘러 나옵니다.",
+            "당신은 티셔츠를 입습니다.",
+            "당신은 반바지를 착용합니다.",
+        ]
+    )
 
 
 def _find_npc_id(query: str, candidates: list[str], world: World) -> str | None:

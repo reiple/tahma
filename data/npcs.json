@@ -21,5 +21,37 @@
     "exp_reward": 5,
     "hostile": true,
     "dialogue": []
+  },
+  "yeonhui": {
+    "name": "연희",
+    "description": "퇴마사들에게 임무를 나누어 주는 사람이다.",
+    "hp": 30,
+    "max_hp": 30,
+    "attack": 0,
+    "exp_reward": 0,
+    "hostile": false,
+    "dialogue": [
+      "레벨이 낮다면 먼저 입장티켓을 받아 수련장으로 가보세요."
+    ]
+  },
+  "notice_man": {
+    "name": "공지맨",
+    "description": "목에 간판을 걸고 광장을 돌아다니며 안내를 중얼거린다.",
+    "hp": 20,
+    "max_hp": 20,
+    "attack": 0,
+    "exp_reward": 0,
+    "hostile": false,
+    "dialogue": []
+  },
+  "nesporin": {
+    "name": "네스포린",
+    "description": "대기실에 서 있는 인물이다.",
+    "hp": 20,
+    "max_hp": 20,
+    "attack": 0,
+    "exp_reward": 0,
+    "hostile": false,
+    "dialogue": []
   }
 }

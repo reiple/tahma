@@ -1,9 +1,9 @@
-﻿from __future__ import annotations
+from __future__ import annotations
 
 import asyncio
 import sys
-from tempfile import TemporaryDirectory
 from pathlib import Path
+from tempfile import TemporaryDirectory
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
@@ -50,20 +50,13 @@ async def main() -> None:
         async with server:
             reader, writer = await asyncio.open_connection(config.host, port)
             output = await read_available(reader)
-            await send_line(writer, "심리학과")
-            output += await read_available(reader)
-            await send_line(writer, "심리학과")
-            output += await read_available(reader)
-            await send_line(writer, "보기")
-            output += await read_available(reader)
-            await send_line(writer, "북")
-            output += await read_available(reader)
-            await send_line(writer, "종료")
-            output += await read_available(reader)
+            for command in ["심리학과", "심리학과", "보기", "광장", "서", "서", "입장티켓", "동", "동", "북", "나가는길", "모두 무장", "광장", "남", "종료"]:
+                await send_line(writer, command)
+                output += await read_available(reader)
             writer.close()
             await writer.wait_closed()
 
-    expected = ["퇴마요새", "요새 정문", "중앙 마당"]
+    expected = ["대기실", "공공건물1층", "연희", "상가", "축복받은 엑토스탭", "광장"]
     missing = [text for text in expected if text not in output]
     if missing:
         raise AssertionError(f"missing expected text: {missing}\n{output}")
