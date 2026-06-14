@@ -1,0 +1,10 @@
+﻿{
+  "paper_talisman": {
+    "name": "종이 부적",
+    "description": "붉은 먹으로 쓰인 작은 부적이다. 손에 쥐면 약간 따뜻하다."
+  },
+  "brass_key": {
+    "name": "놋쇠 열쇠",
+    "description": "작은 문을 열 수 있을 것 같은 묵직한 열쇠다."
+  }
+}

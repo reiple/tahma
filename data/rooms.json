@@ -1,0 +1,50 @@
+﻿{
+  "gate": {
+    "name": "요새 정문",
+    "description": "검은 부적이 나부끼는 퇴마요새의 정문이다. 안쪽에서는 낮은 종소리가 울린다.",
+    "exits": {
+      "북": "courtyard",
+      "동": "guard_room"
+    },
+    "items": [],
+    "npcs": []
+  },
+  "courtyard": {
+    "name": "중앙 마당",
+    "description": "돌바닥 사이로 오래된 향 냄새가 배어 있다. 사방의 문은 아직 조용하다.",
+    "exits": {
+      "남": "gate",
+      "서": "library",
+      "북": "shrine"
+    },
+    "items": ["paper_talisman"],
+    "npcs": []
+  },
+  "guard_room": {
+    "name": "수위실",
+    "description": "낡은 등잔 하나가 책상 위에서 떨린다. 누군가 급히 떠난 흔적이 있다.",
+    "exits": {
+      "서": "gate"
+    },
+    "items": ["brass_key"],
+    "npcs": []
+  },
+  "library": {
+    "name": "장서각",
+    "description": "퇴마 기록과 오래된 심리학 서적이 함께 꽂혀 있는 방이다.",
+    "exits": {
+      "동": "courtyard"
+    },
+    "items": [],
+    "npcs": ["침묵한 사서"]
+  },
+  "shrine": {
+    "name": "봉인 제단",
+    "description": "제단 중앙의 금 간 거울이 희미하게 빛난다. 아직은 건드리지 않는 편이 좋겠다.",
+    "exits": {
+      "남": "courtyard"
+    },
+    "items": [],
+    "npcs": []
+  }
+}
