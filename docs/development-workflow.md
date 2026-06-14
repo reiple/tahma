@@ -1,6 +1,6 @@
 # Development Workflow
 
-This project uses a branch-and-PR workflow for every meaningful change.
+This project uses a branch-and-PR workflow for every meaningful change. Pull Requests must be reviewed before they are merged into `main`.
 
 ## Branches
 
@@ -19,9 +19,11 @@ This project uses a branch-and-PR workflow for every meaningful change.
 3. Make the change.
 4. Run the relevant verification commands.
 5. Commit the change.
-6. Open a Pull Request targeting `main`.
-7. Merge the PR after review.
-8. Return to `main` and confirm the working tree is clean.
+6. Push the branch to the remote repository.
+7. Open a Pull Request targeting `main`.
+8. Review the Pull Request before merging.
+9. Merge the PR into `main` only after review.
+10. Return to `main` and confirm the working tree is clean.
 
 ## Verification
 
@@ -44,5 +46,7 @@ Each PR should include:
 - Why it changed
 - How it was verified
 - Any remaining risk or follow-up
+
+Do not bypass this flow for normal project changes. Documentation-only changes still require a branch, remote Pull Request, review, and merge into `main`.
 
 If no remote repository or PR tool is configured yet, keep the branch and commit history structured the same way. Once a remote is connected, push the branch and create the PR there before merging to `main`.
