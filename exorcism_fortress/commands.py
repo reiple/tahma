@@ -16,6 +16,9 @@ HELP_TEXT = """사용 가능한 명령어
   소지품, inventory      가진 물건을 봅니다.
   줍기 <물건>            장소의 물건을 줍습니다.
   버리기 <물건>          가진 물건을 내려놓습니다.
+  상태, status           체력과 경험치를 확인합니다.
+  휴식, rest             잠시 쉬며 체력을 회복합니다.
+  공격 <대상>, attack    같은 장소의 적을 공격합니다.
   말 <내용>              같은 서버의 접속자에게 말합니다.
   인코딩 <utf-8|cp949|euc-kr>  현재 접속의 출력 인코딩을 바꿉니다.
   종료, quit             저장 후 접속을 끝냅니다."""
@@ -62,6 +65,20 @@ def execute_command(raw_command: str, player: Player, world: World) -> CommandRe
     if verb_lower in {"버리기", "drop"}:
         return CommandResult(_drop_item(rest.strip(), player, world))
 
+    if verb_lower in {"상태", "status", "stat"}:
+        return CommandResult(f"체력: {player.hp}/{player.max_hp}\r\n공격력: {player.attack}\r\n경험치: {player.exp}")
+
+    if verb_lower in {"휴식", "쉬기", "rest"}:
+        before = player.hp
+        player.hp = min(player.max_hp, player.hp + 8)
+        recovered = player.hp - before
+        if recovered <= 0:
+            return CommandResult("이미 충분히 회복했습니다.")
+        return CommandResult(f"잠시 숨을 고릅니다. 체력을 {recovered} 회복했습니다.")
+
+    if verb_lower in {"공격", "attack", "hit"}:
+        return CommandResult(_attack_npc(rest.strip(), player, world))
+
     if verb_lower in {"말", "say", "'"}:
         text = rest.strip()
         if not text:
@@ -103,3 +120,40 @@ def _drop_item(query: str, player: Player, world: World) -> str:
     player.inventory.remove(item_id)
     world.rooms[player.room_id].items.append(item_id)
     return f"{world.items[item_id].name}을(를) 내려놓았습니다."
+
+
+def _find_npc_id(query: str, candidates: list[str], world: World) -> str | None:
+    if len(candidates) == 1 and not query:
+        return candidates[0]
+    lowered = query.lower()
+    for npc_id in candidates:
+        npc = world.npcs.get(npc_id)
+        if npc and (lowered == npc_id.lower() or lowered == npc.name.lower() or lowered in npc.name.lower()):
+            return npc_id
+    return None
+
+
+def _attack_npc(query: str, player: Player, world: World) -> str:
+    room = world.rooms[player.room_id]
+    npc_id = _find_npc_id(query, room.npcs, world)
+    if npc_id is None:
+        return "공격할 대상이 없습니다."
+
+    npc = world.npcs[npc_id]
+    lines = [f"{npc.name}을(를) 공격했습니다. {player.attack} 피해를 입혔습니다."]
+    npc.hp = max(0, npc.hp - player.attack)
+    if npc.hp <= 0:
+        room.npcs.remove(npc_id)
+        player.exp += npc.exp_reward
+        lines.append(f"{npc.name}이(가) 물러났습니다. 경험치 {npc.exp_reward}을(를) 얻었습니다.")
+        return "\r\n".join(lines)
+
+    player.hp = max(0, player.hp - npc.attack)
+    lines.append(f"{npc.name}이(가) 반격합니다. {npc.attack} 피해를 받았습니다.")
+    if player.hp <= 0:
+        player.hp = max(1, player.max_hp // 2)
+        player.room_id = "gate"
+        lines.append("의식을 잃고 요새 정문에서 깨어났습니다.")
+    else:
+        lines.append(f"남은 체력: {player.hp}/{player.max_hp}")
+    return "\r\n".join(lines)

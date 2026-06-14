@@ -11,6 +11,18 @@ class Item:
 
 
 @dataclass
+class Npc:
+    id: str
+    name: str
+    description: str
+    hp: int
+    max_hp: int
+    attack: int
+    exp_reward: int = 0
+    hostile: bool = False
+
+
+@dataclass
 class Room:
     id: str
     name: str
@@ -27,4 +39,6 @@ class Player:
     room_id: str = "gate"
     hp: int = 30
     max_hp: int = 30
+    attack: int = 6
+    exp: int = 0
     inventory: list[str] = field(default_factory=list)
